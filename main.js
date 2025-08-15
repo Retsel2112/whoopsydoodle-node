@@ -96,23 +96,26 @@ app.get('/l/:shortlink', (req, res) => {
         data = stmt.get(shortlink);
     } else {
         data = DBG_DATASTORE[shortlink];
+        console.log(data)
     }
     
     if (!data) {
         return res.status(404).send('Short URL not found.');
     }
 
-    console.log(data.first_url)
-    console.log(data.redirect_url)
-    console.log(data.access_count)
-
-    const newCount = (DBG ? data[4] : data.access_count) + 1;
-    count_redirect(shortlink, newCount);
+    if (!DBG) {
+        console.log(data.first_url)
+        console.log(data.redirect_url)
+        console.log(data.access_count)
+    }
 
     const accessCount = DBG ? data[4] : data.access_count;
+    const newCount = accessCount + 1;
+    count_redirect(shortlink, newCount);
+
     const firstUrl = DBG ? data[1] : data.first_url;
     const redirectUrl = DBG ? data[2] : data.redirect_url;
-
+    
     if (accessCount === 0) {
         return res.redirect(firstUrl);
     } else {
