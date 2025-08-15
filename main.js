@@ -36,6 +36,7 @@ function db_setup() {
     
     try {
         db = new Database('redirdata.db');
+        db.pragma('journal_mode = WAL')
         const sql = `
             CREATE TABLE IF NOT EXISTS redirbase (
                 create_time DATE,
@@ -88,6 +89,8 @@ app.get('/l/:shortlink', (req, res) => {
     const { shortlink } = req.params;
     let data = null;
 
+    console.log(shortlink);
+
     if (!DBG) {
         const stmt = db.prepare("SELECT first_url, redirect_url, access_count FROM redirbase WHERE short_url = ?");
         data = stmt.get(shortlink);
@@ -98,6 +101,10 @@ app.get('/l/:shortlink', (req, res) => {
     if (!data) {
         return res.status(404).send('Short URL not found.');
     }
+
+    console.log(data.first_url)
+    console.log(data.redirect_url)
+    console.log(data.access_count)
 
     const newCount = (DBG ? data[4] : data.access_count) + 1;
     count_redirect(shortlink, newCount);
