@@ -1,0 +1,15 @@
+{
+  "name": "whoopsy-node",
+  "version": "1.0.0",
+  "description": "Underhanded URL shortener which sends a different redirect destination on first load to trick URL previews in, e.g., Discord",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Retsel",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "express": "^5.1.0"
+  }
+}
