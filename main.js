@@ -1,14 +1,24 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
 const Database = require('better-sqlite3');
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001']
+const corsOptions = {
+    origin: function(origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+};
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors(corsOptions))
+app.use(express.json())
 
 // Constants and Global Variables
 const ID_LEN = 15;
